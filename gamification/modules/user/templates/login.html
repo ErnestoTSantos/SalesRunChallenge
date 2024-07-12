@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0f7fa;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #007bb5;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #007bb5;
+            border-radius: 25px;
+            box-sizing: border-box;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            background-color: #007bb5;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #005f87;
+        }
+
+        .login-container .signup-link {
+            margin-top: 20px;
+            display: block;
+            color: #007bb5;
+            text-decoration: none;
+        }
+
+        .login-container .signup-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        {% if not user.is_authenticated %}
+            <form action="{% url 'user:login' %}" method="post">
+                {% csrf_token %}
+                {{ form.username }}
+                {{ form.password }}
+                <button type="submit">Entrar</button>
+            </form>
+            <a href="{% url 'user:account' %}" class="signup-link">Criar conta</a>
+        {% else %}
+            <p>Você já está logado.</p>
+            <a href="{% url 'user:logout' %}">Sair</a>
+        {% endif %}
+    </div>
+</body>
+</html>

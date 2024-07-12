@@ -1,0 +1,59 @@
+{% extends 'global/base_template.html' %}
+
+{% block style %}
+    .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 50px auto;
+    }
+
+    h2 {
+        color: #007bff;
+        text-align: center;
+    }
+
+    .profile-group {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .profile-label {
+        color: #007bff;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .profile-value {
+        font-size: 16px;
+        color: #333333;
+    }
+
+    .profile-picture {
+        border-radius: 50%;
+        max-width: 150px;
+        margin: 0 auto 20px;
+    }
+
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+    <h2>Perfil do Usuário</h2>
+    <div class="profile-group">
+        <span class="profile-label">Nome de Usuário:</span>
+        <span class="profile-value">{{ user.username }}</span>
+    </div>
+    <div class="profile-group">
+        <span class="profile-label">Email:</span>
+        <span class="profile-value">{{ user.email }}</span>
+    </div>
+    <div class="profile-group">
+        <span class="profile-label">Data de Criação da Conta:</span>
+        <span class="profile-value">{{ user.date_joined|date:"d/m/Y" }}</span>
+    </div>
+</div>
+{% endblock content %}

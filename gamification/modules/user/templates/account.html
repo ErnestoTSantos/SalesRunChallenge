@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0f7fa;
+        }
+
+        .signup-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .signup-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #007bb5;
+        }
+
+        .signup-container input, .signup-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #007bb5;
+            border-radius: 25px;
+            box-sizing: border-box;
+            background-color: #fff; /* Remover fundo cinza */
+        }
+
+        .signup-container button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            background-color: #007bb5;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .signup-container button:hover {
+            background-color: #005f87;
+        }
+
+        .signup-container .login-link {
+            margin-top: 20px;
+            display: block;
+            color: #007bb5;
+            text-decoration: none;
+        }
+
+        .signup-container .login-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Criação de Usuário</h2>
+        {% if form.errors %}
+            <ul class="errorlist">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error|escape }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if not user.is_authenticated %}
+            <form action="{% url 'user:account' %}" method="post">
+                {% csrf_token %}
+                {{ form.username }}
+                {{ form.cpf }}
+                {{ form.password }}
+                {{ form.password1 }}
+                {{ form.email }}
+                {{ form.first_name }}
+                {{ form.last_name }}
+                {{ form.birth_date }}
+                {{ form.role }}
+                {{ form.phone }}
+                <button type="submit">Criar Conta</button>
+            </form>
+            <a href="{% url 'user:login' %}" class="login-link">Já tem uma conta? Entrar</a>
+        {% else %}
+            <p>Você já possui uma conta.</p>
+            <a href="{% url 'user:logout' %}">Sair</a>
+        {% endif %}
+    </div>
+</body>
+</html>

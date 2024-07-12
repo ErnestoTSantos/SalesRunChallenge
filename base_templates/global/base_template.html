@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #e0f7fa;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bb5;
+            padding: 10px 20px;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .navbar .brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .main {
+            padding: 20px;
+        }
+
+        .footer {
+            background-color: #007bb5;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar a {
+                margin: 5px 0;
+            }
+
+            .footer {
+                position: static;
+            }
+        }
+        {% block style %}{% endblock style %}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="brand">Gamification - Salesrun</div>
+        <div>
+            <a href="{% url 'challenge:list-challenge' %}">Desafios</a>
+            <a href="{% url 'challenge:challenge' %}">Criar desafio</a>
+            <a href="#contact">Usuários</a>
+            <a href="{% url 'user:profile' request.user.id %}">Meu perfil</a>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'user:logout' %}">Sair</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% block content %}{% endblock content %}
+
+    <footer class="footer">
+        <p>&copy; Desafio salesrun - 2024. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
