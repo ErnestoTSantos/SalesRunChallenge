@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import AbstractUser
 
+
 class User(AbstractUser):
     class RoleChoices(models.IntegerChoices):
         ADMIN = 1, "Admin"
@@ -14,7 +15,9 @@ class User(AbstractUser):
     birth_date = models.DateField()
     phone = models.CharField(max_length=11)
     role = models.IntegerField(choices=RoleChoices.choices, default=RoleChoices.BROKER)
-    user_permission = models.ManyToManyField(Permission, blank=True, related_name="custom_permissions")
+    user_permission = models.ManyToManyField(
+        Permission, blank=True, related_name="custom_permissions"
+    )
 
     class Meta:
         verbose_name = "Usuário"

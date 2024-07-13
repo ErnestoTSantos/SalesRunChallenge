@@ -11,7 +11,15 @@ def _create_db_with_superuser() -> None:
     email = "test.admin@gmail.com"
 
     if user_model.objects.filter(username=username).count() == 0:
-        user_model.objects.create_superuser(username=username, password=password, cpf=cpf, email=email, phone="51932039455", birth_date="2000-10-10", role=1)
+        user_model.objects.create_superuser(
+            username=username,
+            password=password,
+            cpf=cpf,
+            email=email,
+            phone="51932039455",
+            birth_date="2000-10-10",
+            role=1,
+        )
 
 
 class Command(BaseCommand):

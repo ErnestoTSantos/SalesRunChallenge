@@ -12,17 +12,15 @@ from gamification.modules.challenge.models import Challenge
 from gamification.modules.challenge.forms import ChallengeForm
 
 
-@method_decorator(
-    login_required(login_url='user:login'),
-    name="get"
-)
-@method_decorator(
-    login_required(login_url='user:login'),
-    name="post"
-)
+@method_decorator(login_required(login_url="user:login"), name="get")
+@method_decorator(login_required(login_url="user:login"), name="post")
 class ChallengeView(View):
     def get(self, request):
-        return render(request=request, template_name='challenge.html', context={"form": ChallengeForm()})
+        return render(
+            request=request,
+            template_name="challenge.html",
+            context={"form": ChallengeForm()},
+        )
 
     def post(self, request):
         form = ChallengeForm(request.POST, request.FILES)
@@ -30,34 +28,32 @@ class ChallengeView(View):
         if form.is_valid():
             form.save()
         else:
-            return render(request, template_name='challenge.html', context={'form': form})
+            return render(
+                request, template_name="challenge.html", context={"form": form}
+            )
 
-        return redirect('challenge:challenge')
+        return redirect("challenge:challenge")
 
 
-@method_decorator(
-    login_required(login_url='user:login'),
-    name="get"
-)
+@method_decorator(login_required(login_url="user:login"), name="get")
 class ListChallengeView(ListView):
     model = Challenge
-    template_name = 'list_challenge.html'
-    context_object_name = 'challenges'
-    ordering = ['id']
+    template_name = "list_challenge.html"
+    context_object_name = "challenges"
+    ordering = ["id"]
 
-@method_decorator(
-    login_required(login_url='user:login'),
-    name="get"
-)
-@method_decorator(
-    login_required(login_url='user:login'),
-    name="post"
-)
+
+@method_decorator(login_required(login_url="user:login"), name="get")
+@method_decorator(login_required(login_url="user:login"), name="post")
 class DetailChallengeView(View):
     def get(self, request, pk):
         challenge = get_object_or_404(Challenge, pk=pk)
         form = ChallengeForm(instance=challenge)
-        return render(request=request, template_name='challenge.html', context={'form': form, 'challenge': challenge})
+        return render(
+            request=request,
+            template_name="challenge.html",
+            context={"form": form, "challenge": challenge},
+        )
 
     def post(self, request, pk):
         challenge = get_object_or_404(Challenge, pk=pk)
@@ -66,6 +62,10 @@ class DetailChallengeView(View):
         if form.is_valid():
             form.save()
         else:
-            return render(request, template_name='challenge.html', context={'form': form, 'challenge': challenge})
+            return render(
+                request,
+                template_name="challenge.html",
+                context={"form": form, "challenge": challenge},
+            )
 
-        return redirect('challenge:challenge-detail', pk=pk)
+        return redirect("challenge:challenge-detail", pk=pk)
