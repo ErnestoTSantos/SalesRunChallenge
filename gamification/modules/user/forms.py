@@ -1,5 +1,6 @@
 from django import forms
 
+from django.contrib.auth.models import Permission
 from django.core.validators import ValidationError
 
 from gamification.modules.utils import add_placeholder
@@ -94,10 +95,31 @@ class UserCreationForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_data['is_superuser'] = False
-        cleaned_data['is_staff'] = False
-        cleaned_data['is_active'] = True
-        cleaned_data['date_joined'] = date.today()
+        user_permission = [
+            'can_view_assigned_challenge',
+            'can_accept_challenge',
+        ]
+        permissions = Permission.objects.filter(codename__in=user_permission)
+        cleaned_data.update(
+            {
+                'is_superuser': False,
+                'is_staff': False,
+                'is_active': True,
+                'user_permission': permissions,
+                'date_joined': date.today()
+            }
+        )
+
+        role = cleaned_data.get('role', 2)
+        if role == 1:
+            user_permission = [
+                'can_manage_user',
+                'can_create_challenge',
+                'can_update_challenge',
+                'can_set_challenge',
+            ]
+            permissions = Permission.objects.filter(codename__in=user_permission)
+            cleaned_data['user_permission'] = permissions
 
         password = cleaned_data.get('password', '')
         password1 = cleaned_data.get('password1', '')
@@ -111,6 +133,10 @@ class UserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password1'])
 
         if commit:
+            user.save()
+            permissions = self.cleaned_data.get('user_permission')
+            for permission in permissions:
+                user.user_permissions.add(permission)
             user.save()
 
         return user

@@ -1,0 +1,92 @@
+{% extends 'global/base_template.html' %}
+
+{% block style %}
+    .container {
+        max-width: 900px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 50px auto;
+    }
+
+    h2 {
+        color: #007bff;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .user-box {
+        background-color: rgba(0, 0, 0, 0.05); /* Fumaça no fundo */
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-actions a {
+        text-decoration: none;
+        color: #007bff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .user-actions a:hover {
+        background-color: #e0e0e0;
+    }
+
+    .user-actions a.delete {
+        color: #ff4d4d;
+    }
+
+    .user-actions a.edit {
+        color: #ffa500;
+    }
+
+    .user-actions a.view {
+        color: #007bff;
+    }
+
+    .icon {
+        margin-right: 5px;
+    }
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+    <h2>Lista de Usuários</h2>
+    {% for user in users %}
+    <div class="user-box">
+        <div class="user-info">
+            <p><strong>Nome de Usuário:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+        <div class="user-actions">
+            <a href="#" class="view">
+                <span class="icon">👁️</span> Visualizar
+            </a>
+            <a href="#" class="edit">
+                <span class="icon">✏️</span> Editar
+            </a>
+            <a href="#" class="delete">
+                <span class="icon">🗑️</span> Deletar
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

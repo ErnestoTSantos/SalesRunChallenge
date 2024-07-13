@@ -6,7 +6,7 @@
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            margin: 50px auto; /* Adicionando margem superior e inferior de 50px */
+            margin: 50px auto;
         }
 
         h2 {
@@ -36,7 +36,7 @@
 
         .form-select {
             position: relative;
-            width: calc(100% - 32px); /* Ajuste para incluir o ícone */
+            width: calc(100% - 32px);
             padding: 10px;
             font-size: 16px;
             border: 1px solid #007bff;
@@ -45,7 +45,6 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background: url('plus_icon.png') no-repeat right center / 20px 20px; /* Ícone de adição */
         }
 
         .form-select::-ms-expand {
@@ -129,6 +128,9 @@
             {{ form.description }}
         </div>
         <div class="form-group">
+            {{ form.rule }}
+        </div>
+        <div class="form-group">
             {{ form.banner }}
         </div>
         <div class="form-group">
@@ -167,9 +169,7 @@
             {{ form.banner }}
         </div>
         <div class="form-group">
-            <div class="form-select-container">
-                {{ form.category }}
-            </div>
+            {{ form.point }}
         </div>
         {% if end_date %}
             <div class="form-group">

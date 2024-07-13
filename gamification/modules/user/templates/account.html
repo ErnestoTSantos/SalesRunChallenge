@@ -13,6 +13,8 @@
             height: 100vh;
             margin: 0;
             background-color: #e0f7fa;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .signup-container {
@@ -20,8 +22,10 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
+            margin: 40px 20px; /* Adicionada margem superior, inferior e lateral */
         }
 
         .signup-container h2 {
@@ -37,7 +41,7 @@
             border: 1px solid #007bb5;
             border-radius: 25px;
             box-sizing: border-box;
-            background-color: #fff; /* Remover fundo cinza */
+            background-color: #fff;
         }
 
         .signup-container button {
@@ -64,6 +68,26 @@
 
         .signup-container .login-link:hover {
             text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 20px;
+                margin: 20px 10px;
+            }
+
+            .signup-container h2 {
+                font-size: 20px;
+            }
+
+            .signup-container input, .signup-container select, .signup-container button {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .signup-container .login-link {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
