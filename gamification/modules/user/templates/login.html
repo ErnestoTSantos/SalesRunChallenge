@@ -48,20 +48,24 @@
             color: #fff;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .login-container button:hover {
             background-color: #005f87;
         }
 
-        .login-container .signup-link {
-            margin-top: 20px;
+        .login-container a {
             display: block;
+            margin-top: 20px;
             color: #007bb5;
             text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
         }
 
-        .login-container .signup-link:hover {
+        .login-container a:hover {
+            color: #005f87;
             text-decoration: underline;
         }
     </style>
@@ -79,7 +83,8 @@
             <a href="{% url 'user:account' %}" class="signup-link">Criar conta</a>
         {% else %}
             <p>Você já está logado.</p>
-            <a href="{% url 'user:logout' %}">Sair</a>
+            <a href="{% url 'challenge:list-challenge' %}" class="signup-link">Listagem dos desafios</a>
+            <a href="{% url 'user:logout' %}" class="signup-link">Sair</a>
         {% endif %}
     </div>
 </body>

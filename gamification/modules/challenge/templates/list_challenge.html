@@ -2,7 +2,7 @@
 {% block style %}
     .container {
         display: flex;
-        justify-content: space-between;
+        justify-content: center; /* Centraliza conteúdo */
         align-items: flex-start;
         max-width: 1200px;
         margin: 0 auto;
@@ -14,6 +14,7 @@
         flex-wrap: wrap;
         gap: 20px;
         width: 70%;
+        justify-content: center; /* Centraliza os desafios */
     }
     .desafio {
         width: calc(33.33% - 20px);
@@ -128,40 +129,40 @@
 
 {% block content %}
 <div class="container">
+    {% if challenges %}
     <div class="desafios-container">
-        {% if challenges %}
-            {% for challenge in challenges %}
-                <div class="desafio">
-                    <div class="imagem" style="background-image: url('{{ challenge.banner.url }}');">
-                        <a href="{% url 'challenge:challenge-detail' challenge.id %}">
-                            <div class="overlay"></div>
-                            <div class="texto">
-                                <h2>{{ challenge.name }}</h2>
-                                <p>{{ challenge.description }}</p>
-                            </div>
-                        </a>
-                    </div>
+        {% for challenge in challenges %}
+            <div class="desafio">
+                <div class="imagem" style="background-image: url('{{ challenge.banner.url }}');">
+                    <a href="{% url 'challenge:challenge-detail' challenge.id %}">
+                        <div class="overlay"></div>
+                        <div class="texto">
+                            <h2>{{ challenge.name }}</h2>
+                            <p>{{ challenge.description }}</p>
+                        </div>
+                    </a>
                 </div>
-            {% endfor %}
-        {% else %}
-            <div class="no-challenges">
-                <p>Não existem desafios lançados.</p>
             </div>
-        {% endif %}
+        {% endfor %}
     </div>
+    {% else %}
+    <div class="no-challenges">
+        <p>Não existem desafios lançados.</p>
+    </div>
+    {% endif %}
 
     {% if perms.user.can_accept_challenge %}
     <div class="lista-desafios">
         <h3>Desafios a serem aceitos:</h3>
         <ul>
             {% for challenge in challenges_pending_acceptance %}
-                <li>
-                    {{ challenge.name }}
-                    <div class="btn-group">
-                        <a href="{% url 'challenge:accept-challenge' challenge.id %}" class="btn-aceitar">Aceitar</a>
-                        <a href="{% url 'challenge:reject-challenge' challenge.id %}" class="btn-recusar">Recusar</a>
-                    </div>
-                </li>
+            <li>
+                {{ challenge.name }}
+                <div class="btn-group">
+                    <a href="{% url 'challenge:accept-challenge' challenge.id request.user.id %}" class="btn-aceitar">Aceitar</a>
+                    <a href="{% url 'challenge:reject-challenge' challenge.id request.user.id %}" class="btn-recusar">Recusar</a>
+                </div>
+            </li>
             {% endfor %}
         </ul>
     </div>

@@ -9,6 +9,8 @@ from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+from gamification.modules.user.models import User
+
 from gamification.modules.challenge.models import Challenge
 from gamification.modules.challenge.models import UserChallenge
 
@@ -56,7 +58,6 @@ class ListChallengeView(ListView):
                 ).order_by("-end_date"),
                 "challenges": Challenge.objects.filter(
                     user_challenge__user=self.request.user,
-                    user_challenge__accepted=True,
                 ).order_by("-end_date") if self.request.user.role == 2 else Challenge.objects.all().order_by("-end_date"),
             }
         )
@@ -72,7 +73,7 @@ class DetailChallengeView(View):
         return render(
             request=request,
             template_name="challenge.html",
-            context={"form": form, "challenge": challenge},
+            context={"form": form, "challenge": challenge, "users": User.objects.filter(user_challenge__accepted=True, user_challenge__challenge=challenge)},
         )
 
     def post(self, request, pk):
@@ -115,8 +116,8 @@ class AssignChallengeView(View):
 
 
 class AcceptChallengeView(View):
-    def get(self, request, challenge):
-        challenge = get_object_or_404(UserChallenge, challenge=challenge)
+    def get(self, request, challenge, user):
+        challenge = get_object_or_404(UserChallenge, challenge=challenge, user=user)
 
         if request.user != challenge.user:
             return HttpResponseForbidden("Você não está cadastrado nesse desafio.")
@@ -127,8 +128,8 @@ class AcceptChallengeView(View):
 
         return redirect("challenge:list-challenge")
 class RejectChallengeView(View):
-    def get(self, request, challenge):
-        challenge = get_object_or_404(UserChallenge, challenge=challenge)
+    def get(self, request, challenge, user):
+        challenge = get_object_or_404(UserChallenge, challenge=challenge, user=user)
 
         if request.user != challenge.user:
             return HttpResponseForbidden("Você não está cadastrado nesse desafio.")

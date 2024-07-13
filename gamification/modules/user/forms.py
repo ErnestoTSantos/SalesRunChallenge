@@ -73,8 +73,10 @@ class UserCreationForm(forms.ModelForm):
         error_messages={"required": "Please, repeat your password"},
     )
 
-    def validate_cpf(self):
+    def clean_cpf(self):
         cpf = self.cleaned_data.get("cpf", "")
+        cpf = cpf.replace(".", "").replace("-", "")
+
         exists = User.objects.filter(cpf=cpf).exists()
 
         if exists:
@@ -82,6 +84,8 @@ class UserCreationForm(forms.ModelForm):
                 "User CPF is already in use",
                 code="invalid",
             )
+
+        return cpf
 
     def clean_email(self):
         email = self.cleaned_data.get("email", "")

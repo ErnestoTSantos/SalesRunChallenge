@@ -11,7 +11,7 @@ class User(AbstractUser):
         BROKER = 2, "Broker"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    cpf = models.CharField(max_length=11, unique=True)
+    cpf = models.CharField(max_length=14, unique=True)
     birth_date = models.DateField()
     phone = models.CharField(max_length=11)
     role = models.IntegerField(choices=RoleChoices.choices, default=RoleChoices.BROKER)

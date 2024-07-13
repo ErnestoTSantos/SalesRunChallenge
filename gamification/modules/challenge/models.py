@@ -19,7 +19,7 @@ class Challenge(models.Model):
 
 
 class UserChallenge(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_challenge", verbose_name="Usuário")
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name="user_challenge", verbose_name="Desafio")
     accepted = models.BooleanField(default=False, verbose_name="Desafio aceito")
     received_response = models.BooleanField(default=False, verbose_name="Recebeu resposta")

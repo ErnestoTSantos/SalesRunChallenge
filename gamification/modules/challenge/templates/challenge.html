@@ -1,5 +1,10 @@
 {% extends 'global/base_template.html' %}
 {% block style %}
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
     .container {
         max-width: 600px;
         background-color: #ffffff;
@@ -7,11 +12,41 @@
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         padding: 30px;
         margin: 50px auto;
+        flex: 1;
+    }
+
+    .user-table {
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 50px auto;
+        flex: 1;
+        margin-right: 20px;
     }
 
     h2 {
         color: #007bff;
         text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
     }
 
     .form-group {
@@ -77,99 +112,122 @@
 {% endblock style %}
 
 {% block content %}
-<div class="container">
-    {% if not challenge %}
-    <h2>Criar Desafio</h2>
-    <form action="{% url 'challenge:challenge' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if form.errors %}
-            <ul class="errorlist">
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li><strong>{{ field.label }}:</strong> {{ error|escape }}</li>
+<div class="main-container">
+    <div class="container">
+        {% if not challenge %}
+        <h2>Criar Desafio</h2>
+        <form action="{% url 'challenge:challenge' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <ul class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error|escape }}</li>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <div class="form-group">
-            {{ form.name }}
-        </div>
-        <div class="form-group">
-            {{ form.description }}
-        </div>
-        <div class="form-group">
-            {{ form.rule }}
-        </div>
-        <div class="form-group">
-            <label for="create_banner" class="form-file-label">Escolha um arquivo</label>
-            <input type="file" name="banner" id="create_banner" class="form-file-input">
-        </div>
-        <div class="form-group">
-            <input type="date" id="create_end_date" name="end_date" class="form-input">
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Criar Desafio" class="form-submit">
-        </div>
-    </form>
-    {% elif perms.user.can_update_challenge %}
-    <h2>Atualizar Desafio</h2>
-    <form action="{% url 'challenge:challenge-detail' challenge.id %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if form.errors %}
-            <ul class="errorlist">
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li><strong>{{ field.label }}:</strong> {{ error|escape }}</li>
+                </ul>
+            {% endif %}
+            <div class="form-group">
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                {{ form.rule }}
+            </div>
+            <div class="form-group">
+                <label for="create_banner" class="form-file-label">Escolha um arquivo</label>
+                <input type="file" name="banner" id="create_banner" class="form-file-input">
+            </div>
+            <div class="form-group">
+                <input type="date" id="create_end_date" name="end_date" class="form-input">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar Desafio" class="form-submit">
+            </div>
+        </form>
+        {% elif perms.user.can_update_challenge %}
+        <h2>Atualizar Desafio</h2>
+        <form action="{% url 'challenge:challenge-detail' challenge.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <ul class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error|escape }}</li>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <div class="form-group">
-            {{ form.name }}
-        </div>
-        <div class="form-group">
-            {{ form.rule }}
-        </div>
-        <div class="form-group">
-            {{ form.description }}
-        </div>
-        <div class="form-group">
-            <img src="{{ challenge.banner.url }}" alt="Challenge banner">
-            <label for="update_banner" class="form-file-label">Escolha um arquivo</label>
-            <input type="file" name="banner" id="update_banner" class="form-file-input">
-        </div>
-        <div class="form-group">
-            <input type="date" id="update_end_date" name="end_date" class="form-input" value="{{ challenge.end_date|date:'Y-m-d' }}">
-        </div>
+                </ul>
+            {% endif %}
+            <div class="form-group">
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                {{ form.rule }}
+            </div>
+            <div class="form-group">
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                <img src="{{ challenge.banner.url }}" alt="Challenge banner">
+                <label for="update_banner" class="form-file-label">Escolha um arquivo</label>
+                <input type="file" name="banner" id="update_banner" class="form-file-input">
+            </div>
+            <div class="form-group">
+                <input type="date" id="update_end_date" name="end_date" class="form-input" value="{{ challenge.end_date|date:'Y-m-d' }}">
+            </div>
 
+            <div class="form-group">
+                <input type="submit" value="Atualizar Desafio" class="form-submit">
+            </div>
+        </form>
+        {% else %}
+        <h2>Detalhes do Desafio</h2>
         <div class="form-group">
-            <input type="submit" value="Atualizar Desafio" class="form-submit">
+            <label for="name" class="form-label">Nome:</label>
+            <input type="text" id="name" class="form-input" value="{{ challenge.name }}" readonly>
         </div>
-    </form>
-    {% else %}
-    <h2>Detalhes do Desafio</h2>
-    <div class="form-group">
-        <label for="name" class="form-label">Nome:</label>
-        <input type="text" id="name" class="form-input" value="{{ challenge.name }}" readonly>
-    </div>
-    <div class="form-group">
-        <label for="description" class="form-label">Descrição:</label>
-        <textarea id="description" class="form-input" rows="5" readonly>{{ challenge.description }}</textarea>
-    </div>
-    <div class="form-group">
-        <label for="rule" class="form-label">Regras:</label>
-        <textarea id="rule" class="form-input" rows="5" readonly>{{ challenge.rule }}</textarea>
-    </div>
-    <div class="form-group">
-        <label for="banner" class="form-label">Banner:</label>
-        <img src="{{ challenge.banner.url }}" id="banner" alt="Challenge banner">
-    </div>
-        {% if challenge.end_date %}
         <div class="form-group">
-            <label for="end_date" class="form-label">Data de encerramento:</label>
-            <input type="text" id="end_date" class="form-input" value="{{ challenge.end_date }}" readonly>
+            <label for="description" class="form-label">Descrição:</label>
+            <textarea id="description" class="form-input" rows="5" readonly>{{ challenge.description }}</textarea>
         </div>
+        <div class="form-group">
+            <label for="rule" class="form-label">Regras:</label>
+            <textarea id="rule" class="form-input" rows="5" readonly>{{ challenge.rule }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="banner" class="form-label">Banner:</label>
+            <img src="{{ challenge.banner.url }}" id="banner" alt="Challenge banner">
+        </div>
+            {% if challenge.end_date %}
+            <div class="form-group">
+                <label for="end_date" class="form-label">Data de encerramento:</label>
+                <input type="text" id="end_date" class="form-input" value="{{ challenge.end_date }}" readonly>
+            </div>
+            {% endif %}
         {% endif %}
+    </div>
+    {% if perms.user.can_view_assigned_challenge %}
+    <div class="user-table">
+            <h2>Usuários no Desafio</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome de Usuário</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
     {% endif %}
 </div>
 {% endblock content %}

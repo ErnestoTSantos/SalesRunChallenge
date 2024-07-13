@@ -14,6 +14,6 @@ urlpatterns = [
     path("challenge/<int:pk>/", DetailChallengeView.as_view(), name="challenge-detail"),
     path("list-challenge/", ListChallengeView.as_view(), name="list-challenge"),
     path("assign-challenge/", AssignChallengeView.as_view(), name="assign-challenge"),
-    path("accept-challenge/<int:challenge>/", AcceptChallengeView.as_view(), name="accept-challenge"),
-    path("reject-challenge/<int:challenge>/", RejectChallengeView.as_view(), name="reject-challenge"),
+    path("accept-challenge/<int:challenge>/<uuid:user>/", AcceptChallengeView.as_view(), name="accept-challenge"),
+    path("reject-challenge/<int:challenge>/<uuid:user>/", RejectChallengeView.as_view(), name="reject-challenge"),
 ]
