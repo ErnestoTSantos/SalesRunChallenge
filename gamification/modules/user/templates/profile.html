@@ -110,8 +110,21 @@
         background-color: #e0e0e0;
     }
 
-    .user-actions a.delete {
-        color: #ff4d4d;
+    .user-actions a.delete,
+    .user-actions form button.delete {
+        color: #ffffff;
+        background-color: #ff4d4d;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .user-actions a.delete:hover,
+    .user-actions form button.delete:hover {
+        background-color: #ff1a1a;
     }
 
     .user-actions a.back {
@@ -163,14 +176,17 @@
         </div>
     </div>
     <div class="user-actions">
-        <a href="{% url 'user:delete-account' user.id %}" class="delete">
-            <span class="icon">🗑️</span> Deletar Conta
-        </a>
         {% if perms.user.can_manage_user %}
         <a href="{% url 'user:list-users' %}" class="back">
             <span class="icon">🔙</span> Voltar para Lista
         </a>
         {% endif %}
+        <form action="{% url 'user:delete-account' user.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="delete">
+                <span class="icon">🗑️</span> Deletar Conta
+            </button>
+        </form>
     </div>
 </div>
 {% endblock content %}

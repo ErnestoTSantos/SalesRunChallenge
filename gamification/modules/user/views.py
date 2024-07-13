@@ -106,15 +106,14 @@ class UpdateAccountView(UpdateView):
         return reverse("user:profile", kwargs={"pk": self.kwargs.get("pk")})
 
 
-@method_decorator(login_required(login_url="user:login"), name="delete")
+@method_decorator(login_required(login_url="user:login"), name="post")
 class DeleteAccountView(DeleteView):
     model = User
     context_object_name = "user"
     template_name = "delete_account.html"
-    success_url = reverse_lazy("user:account")
 
-    def delete(self, request, pk):
+    def post(self, request, pk):
         user = get_object_or_404(User, pk=pk)
         user.delete()
 
-        return redirect(self.success_url)
+        return redirect(reverse("user:list-users"))

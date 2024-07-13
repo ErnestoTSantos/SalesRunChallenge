@@ -19,6 +19,7 @@ class UserChallengeAdmin(admin.ModelAdmin):
         "user",
         "challenge",
         "accepted",
+        "received_response",
     )
     search_fields = ("user__name", "challenge__name")
     list_filter = ("accepted",)
