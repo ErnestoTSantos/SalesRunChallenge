@@ -58,7 +58,13 @@ class ListChallengeView(ListView):
                 ).order_by("-end_date"),
                 "challenges": Challenge.objects.filter(
                     user_challenge__user=self.request.user,
-                ).order_by("-end_date") if self.request.user.role == 2 else Challenge.objects.all().order_by("-end_date"),
+                    user_challenge__accepted=False,
+                    user_challenge__received_response=False,
+                ).order_by("-end_date").union(Challenge.objects.filter(
+                    user_challenge__user=self.request.user,
+                    user_challenge__accepted=True,
+                    user_challenge__received_response=True,
+                )) if self.request.user.role == 2 else Challenge.objects.all().order_by("-end_date"),
             }
         )
         return context
