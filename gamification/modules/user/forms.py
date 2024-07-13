@@ -3,6 +3,8 @@ from django import forms
 from django.contrib.auth.models import Permission
 from django.core.validators import ValidationError
 
+from django.contrib.auth.hashers import check_password
+
 from gamification.modules.utils import add_placeholder
 from gamification.modules.utils import strong_password
 from gamification.modules.user.models import User
@@ -148,7 +150,17 @@ class UserCreationForm(forms.ModelForm):
 class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ['username', 'first_name', 'last_name', 'password', 'email', 'cpf', 'phone']
+
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(),
+        validators=[strong_password],
+        required=False,
+        label='Password',
+    )
+
+
 class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -24,7 +24,6 @@ class ChallengeForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-input'}),
             'rule': forms.Textarea(attrs={'class': 'form-input'}),
             'banner': forms.FileInput(attrs={'class': 'form-file'}),
-            'end_date': forms.DateInput(attrs={'class': 'form-file-label'}),
         }
 
     end_date = forms.DateField(

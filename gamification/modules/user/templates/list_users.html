@@ -76,13 +76,10 @@
             <p><strong>Email:</strong> {{ user.email }}</p>
         </div>
         <div class="user-actions">
-            <a href="#" class="view">
+            <a href="{% url 'user:profile' user.id %}" class="view">
                 <span class="icon">👁️</span> Visualizar
             </a>
-            <a href="#" class="edit">
-                <span class="icon">✏️</span> Editar
-            </a>
-            <a href="#" class="delete">
+            <a href="{% url 'user:delete-account' user.id %}" class="delete">
                 <span class="icon">🗑️</span> Deletar
             </a>
         </div>
