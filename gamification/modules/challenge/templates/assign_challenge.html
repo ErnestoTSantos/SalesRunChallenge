@@ -25,22 +25,37 @@
         width: 100%;
         padding: 10px;
         font-size: 16px;
-        border: 1px solid #ccc;
+        border: 1px solid #007bb5;
         border-radius: 4px;
         box-sizing: border-box;
         margin-bottom: 15px;
+        outline: none;
+    }
+    .form-container select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-color: white;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23007bb5"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+        cursor: pointer;
     }
     .form-container button {
-        background-color: #4CAF50;
+        background-color: #007bff;
         color: white;
         padding: 12px 20px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         font-size: 16px;
+        display: block;
+        margin: 0 auto;
+        transition: background-color 0.3s ease;
     }
     .form-container button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
     }
 {% endblock style %}
 
@@ -48,23 +63,13 @@
 <div class="container">
     <div class="form-container">
         <h2>Inserir usuário no desafio</h2>
-        <form action="#" method="post">
+        <form action="{% url 'challenge:assign-challenge' %}" method="post">
             {% csrf_token %}
-            <label for="user">Selecione o Usuário:</label>
-            <select id="user" name="desafio" required>
-                <option value="">Selecione um usuário</option>
-                {% for desafio in desafios %}
-                    <option value="{{ user.id }}">{{ user.nome }}</option>
-                {% endfor %}
-            </select>
+            <label>Selecione o Usuário:</label>
+            {{ form.user }}
 
-            <label for="desafio">Selecione o Desafio:</label>
-            <select id="desafio" name="desafio" required>
-                <option value="">Selecione um desafio</option>
-                {% for desafio in desafios %}
-                    <option value="{{ desafio.id }}">{{ desafio.nome }}</option>
-                {% endfor %}
-            </select>
+            <label>Selecione o Desafio:</label>
+            {{ form.challenge }}
 
             <button type="submit">Atribuir Desafio</button>
         </form>

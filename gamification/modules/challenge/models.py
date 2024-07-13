@@ -20,7 +20,7 @@ class Challenge(models.Model):
 
 class UserChallenge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name="user_challenge")
     accepted = models.BooleanField(default=False)
 
     class Meta:

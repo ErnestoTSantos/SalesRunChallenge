@@ -1,109 +1,79 @@
 {% extends 'global/base_template.html' %}
 {% block style %}
-        .container {
-            max-width: 600px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin: 50px auto;
-        }
+    .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 50px auto;
+    }
 
-        h2 {
-            color: #007bff;
-            text-align: center;
-        }
+    h2 {
+        color: #007bff;
+        text-align: center;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-        .form-label {
-            color: #007bff;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
+    .form-label {
+        color: #007bff;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
 
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
 
-        .form-select {
-            position: relative;
-            width: calc(100% - 32px);
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            box-sizing: border-box;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
+    .form-file-label {
+        display: inline-block;
+        width: 96.5%;
+        padding: 10px;
+        background-color: #ffffff;
+        color: #007bff;
+        text-align: center;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-        .form-select::-ms-expand {
-            display: none;
-        }
+    .form-file-label:hover {
+        background-color: #007bff;
+        color: #ffffff;
+    }
 
-        .form-file {
-            position: relative;
-            width: 100%;
-            margin-top: 8px;
-        }
+    .form-file-input {
+        display: none;
+    }
 
-        .form-file input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
+    .form-submit {
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
 
-        .form-file-label {
-            display: inline-block;
-            width: 100%;
-            padding: 10px;
-            background-color: #ffffff;
-            color: #007bff;
-            text-align: center;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    .form-submit:hover {
+        background-color: #0056b3;
+    }
 
-        .form-file-label:hover {
-            background-color: #007bff;
-            color: #ffffff;
-        }
-
-        .form-submit {
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .form-submit:hover {
-            background-color: #0056b3;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 {% endblock style %}
 
 {% block content %}
@@ -131,15 +101,11 @@
             {{ form.rule }}
         </div>
         <div class="form-group">
-            {{ form.banner }}
+            <label for="create_banner" class="form-file-label">Escolha um arquivo</label>
+            <input type="file" name="banner" id="create_banner" class="form-file-input">
         </div>
         <div class="form-group">
-            <div class="form-select-container">
-                {{ form.category }}
-            </div>
-        </div>
-        <div class="form-group">
-            {{ form.end_date }}
+            <input type="date" id="create_end_date" name="end_date" class="form-input">
         </div>
         <div class="form-group">
             <input type="submit" value="Criar Desafio" class="form-submit">
@@ -169,13 +135,11 @@
         </div>
         <div class="form-group">
             <img src="{{ challenge.banner.url }}" alt="Challenge banner">
-            {{ form.banner }}
+            <label for="update_banner" class="form-file-label">Escolha um arquivo</label>
+            <input type="file" name="banner" id="update_banner" class="form-file-input">
         </div>
         <div class="form-group">
-            {{ form.point }}
-        </div>
-        <div class="form-group">
-            {{ form.end_date }}
+            <input type="date" id="update_end_date" name="end_date" class="form-input" value="{{ challenge.end_date|date:'Y-m-d' }}">
         </div>
 
         <div class="form-group">
@@ -209,4 +173,3 @@
     {% endif %}
 </div>
 {% endblock content %}
-

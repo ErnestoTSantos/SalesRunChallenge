@@ -66,10 +66,13 @@
     <nav class="navbar">
         <div class="brand">Gamification - Salesrun</div>
         <div>
-            Seja bem vindo {{ request.user.first_name|title }}!
+            Bem vindo {{ request.user.first_name|title }}!
             <a href="{% url 'challenge:list-challenge' %}">Desafios</a>
             {% if perms.user.can_create_challenge %}
             <a href="{% url 'challenge:challenge' %}">Criar desafio</a>
+            {% endif %}
+            {% if perms.user.can_set_challenge %}
+            <a href="{% url 'challenge:assign-challenge' %}">Adicionar usuário a desafio</a>
             {% endif %}
             {% if perms.user.can_manage_user %}
             <a href="{% url 'user:list-users' %}">Usuários</a>

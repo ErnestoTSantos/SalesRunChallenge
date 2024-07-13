@@ -2,14 +2,18 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 
+from django.http import HttpResponseForbidden
+
 from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 
 from gamification.modules.challenge.models import Challenge
+from gamification.modules.challenge.models import UserChallenge
+
 from gamification.modules.challenge.forms import ChallengeForm
+from gamification.modules.challenge.forms import AssignChallengeForm
 
 
 @method_decorator(login_required(login_url="user:login"), name="get")
@@ -39,8 +43,23 @@ class ChallengeView(View):
 class ListChallengeView(ListView):
     model = Challenge
     template_name = "list_challenge.html"
-    context_object_name = "challenges"
     ordering = ["id"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                "challenges_pending_acceptance": Challenge.objects.filter(
+                    user_challenge__user=self.request.user,
+                    user_challenge__accepted=False,
+                ).order_by("-end_date"),
+                "challenges": Challenge.objects.filter(
+                    user_challenge__user=self.request.user,
+                    user_challenge__accepted=True,
+                ).order_by("-end_date") if self.request.user.role == 2 else Challenge.objects.all().order_by("-end_date"),
+            }
+        )
+        return context
 
 
 @method_decorator(login_required(login_url="user:login"), name="get")
@@ -69,3 +88,50 @@ class DetailChallengeView(View):
             )
 
         return redirect("challenge:challenge-detail", pk=pk)
+
+
+@method_decorator(login_required(login_url="user:login"), name="get")
+@method_decorator(login_required(login_url="user:login"), name="post")
+class AssignChallengeView(View):
+    def get(self, request):
+        return render(
+            request=request,
+            template_name="assign_challenge.html",
+            context={"form": AssignChallengeForm()},
+        )
+
+    def post(self, request):
+        form = AssignChallengeForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+        else:
+            return render(
+                request, template_name="assign_challenge.html", context={"form": form},
+            )
+
+        return redirect("challenge:list-challenge")
+
+
+class AcceptChallengeView(View):
+    def get(self, request, challenge):
+        challenge = get_object_or_404(UserChallenge, challenge=challenge)
+
+        if request.user != challenge.user:
+            return HttpResponseForbidden("Você não está cadastrado nesse desafio.")
+
+        challenge.accepted = True
+        challenge.save()
+
+        return redirect("challenge:list-challenge")
+class RejectChallengeView(View):
+    def get(self, request, challenge):
+        challenge = get_object_or_404(UserChallenge, challenge=challenge)
+
+        if request.user != challenge.user:
+            return HttpResponseForbidden("Você não está cadastrado nesse desafio.")
+
+        challenge.accepted = False
+        challenge.save()
+
+        return redirect("challenge:list-challenge")

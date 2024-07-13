@@ -2,7 +2,12 @@ from django import forms
 
 from django.core.validators import ValidationError
 
+from PIL import Image
+
+from gamification.modules.user.models import User
+
 from gamification.modules.challenge.models import Challenge
+from gamification.modules.challenge.models import UserChallenge
 
 from gamification.modules.utils import add_placeholder
 
@@ -24,7 +29,6 @@ class ChallengeForm(forms.ModelForm):
             "name": forms.TextInput(attrs={"class": "form-input"}),
             "description": forms.Textarea(attrs={"class": "form-input"}),
             "rule": forms.Textarea(attrs={"class": "form-input"}),
-            "banner": forms.FileInput(attrs={"class": "form-file"}),
         }
 
     end_date = forms.DateField(
@@ -36,6 +40,22 @@ class ChallengeForm(forms.ModelForm):
         label="Identidade visual",
         widget=forms.FileInput(attrs={"class": "form-file-input", "accept": "image/*"}),
     )
+
+    def clean_banner(self):
+        banner = self.cleaned_data.get("banner")
+
+        if not banner:
+            raise ValidationError("O banner é obrigatório.")
+
+        try:
+            Image.open(banner)
+        except IOError:
+            raise ValidationError("O arquivo recebido não é uma imagem.")
+
+        if banner.size > 5 * 1024 * 1024:
+            raise ValidationError("A imagem não pode ter mais de 5MB.")
+
+        return banner
 
     def clean_end_date(self):
         end_date = self.cleaned_data.get("end_date")
@@ -51,3 +71,50 @@ class ChallengeForm(forms.ModelForm):
             challenge.save()
 
         return challenge
+
+
+class AssignChallengeForm(forms.ModelForm):
+    class Meta:
+        model = UserChallenge
+        fields = ["user", "challenge",]
+
+    user = forms.ModelChoiceField(
+        queryset=User.objects.filter(role=2, is_active=True),
+        widget=forms.Select(attrs={"class": "form-input"}),
+    )
+    challenge = forms.ModelChoiceField(
+        queryset=Challenge.objects.all(),
+        widget=forms.Select(attrs={"class": "form-input"}),
+    )
+
+    def clean_challenge(self):
+        challenge = self.cleaned_data.get("challenge")
+        end_date = challenge.end_date
+
+        if challenge is None or challenge == "":
+            raise ValidationError("O desafio inexistente.")
+
+        if end_date:
+            if end_date < date.today():
+                raise ValidationError("O desafio já terminou.")
+
+        return challenge
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        user = cleaned_data.get("user")
+        challenge = cleaned_data.get("challenge")
+
+        if UserChallenge.objects.filter(user=user, challenge=challenge).exists():
+            raise ValidationError("O usuário já possui esse desafio.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        user_challenge = super().save(commit=False)
+
+        if commit:
+            user_challenge.save()
+
+        return user_challenge
