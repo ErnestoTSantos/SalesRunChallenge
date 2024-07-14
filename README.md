@@ -25,6 +25,7 @@ O desafio consiste em criar um portal de controle para desafios, onde administra
 2. Clone o repositório, [documentação para clonar repositório](https://www.cloudbees.com/blog/git-pull-how-it-works-with-detailed-examples).
 3. Renomeio o arquivo `.env.example` para `.env` e preencha a variável `DJANGO_SECRET_KEY` com uma secret key do Django.
     - Você pode gerar uma secret key utilizando o a função `get_random_secret_key'` do próprio Django.
-4. Se você não tiver o `docker` e o `docker-compose` instalados, instale-os.
-5. Abra o terminal na pasta do projeto e execute o comando `docker compose up app`.
-6. Acesse o projeto em `http://localhost:8080`.
+4. Crie na raiz do projeto uma pasta chamada média.
+5. Se você não tiver o `docker` e o `docker-compose` instalados, instale-os.
+6. Abra o terminal na pasta do projeto e execute o comando `docker compose up app`.
+7. Acesse o projeto em `http://localhost:8080`.
